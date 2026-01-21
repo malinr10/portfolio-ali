@@ -53,7 +53,8 @@ export const projects = [
     title: "Student Data REST API",
     tech: "Flask, Python",
     desc: "Lightweight RESTful API handling CRUD operations with standardized JSON responses.",
-    type: "Backend"
+    type: "Backend",
+    link: "https://github.com/malinr10/praktik_rest"
   },
   {
     title: "Agri History",

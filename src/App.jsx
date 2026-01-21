@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-scroll';
 import {
   Github, Mail, Linkedin, MapPin, Phone, Download,
-  GraduationCap, Award, ExternalLink, ChevronRight, Server
+  GraduationCap, Award, ExternalLink, ChevronDown, ChevronUp, Server, FolderOpen
 } from 'lucide-react';
 import { personalData, skills, experience, projects, education, certifications } from './data';
 
@@ -28,7 +28,7 @@ const Navbar = () => (
   <nav className="fixed w-full bg-white/70 backdrop-blur-lg border-b border-slate-200/50 z-50">
     <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent cursor-pointer">
-        Ali.dev
+        Potofolio Ali
       </h1>
       <ul className="hidden md:flex space-x-8 font-medium text-slate-600">
         {['About', 'Skills', 'Experience', 'Education', 'Projects'].map((item) => (
@@ -63,11 +63,7 @@ const Hero = () => (
     <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-indigo-400/10 rounded-full blur-3xl -z-10"></div>
 
     <div className="max-w-4xl mx-auto px-4 text-center z-10">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-      >
+      <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
         <span className="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4 border border-blue-200">
           Available for Internship
         </span>
@@ -79,14 +75,19 @@ const Hero = () => (
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-          <button className="flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-xl font-medium hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-xl shadow-slate-900/20">
+          <a
+            href="/Muhammad_Ali_Nur_Rohman_CV.pdf"
+            download="Muhammad_Ali_Nur_Rohman_CV.pdf"
+            className="flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-xl font-medium hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-xl shadow-slate-900/20 cursor-pointer"
+          >
             <Download size={20} /> Download CV
-          </button>
+          </a>
+
           <div className="flex gap-3 justify-center">
-            <a href="#" className="p-3.5 bg-white border border-slate-200 rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">
+            <a href="https://github.com/malinr10" target="_blank" rel="noreferrer" className="p-3.5 bg-white border border-slate-200 rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">
               <Github size={22} />
             </a>
-            <a href="#" className="p-3.5 bg-white border border-slate-200 rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">
+            <a href="https://www.linkedin.com/in/muhammad-ali-nur-rohman-233532219/" target="_blank" rel="noreferrer" className="p-3.5 bg-white border border-slate-200 rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all shadow-sm">
               <Linkedin size={22} />
             </a>
           </div>
@@ -187,79 +188,117 @@ const Experience = () => (
   </section>
 );
 
-// --- Komponen Education & Certifications (Interactive Links) ---
-const EducationAndCertifications = () => (
-  <section id="education" className="py-24 bg-white">
-    <div className="max-w-6xl mx-auto px-6">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Education & Achievements</h2>
+// --- Komponen Education & Certifications (Interactive Logic Updated) ---
+const EducationAndCertifications = () => {
+  // Logic untuk Load More Sertifikat
+  const [showAllCerts, setShowAllCerts] = useState(false);
+  const visibleCerts = showAllCerts ? certifications : certifications.slice(0, 3);
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Education */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="flex items-center text-xl font-bold mb-8 text-slate-800">
-            <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-              <GraduationCap className="w-5 h-5 text-blue-600" />
-            </span>
-            Formal Education
-          </h3>
-          <div className="space-y-6">
-            {education.map((edu, index) => (
-              <div key={index} className="pl-8 border-l-2 border-slate-100 relative pb-2">
-                <span className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-4 border-blue-500"></span>
-                <h4 className="text-lg font-bold text-slate-900">{edu.school}</h4>
-                <p className="text-blue-600 font-medium text-sm mb-1">{edu.degree}</p>
-                <p className="text-slate-400 text-xs mb-3">{edu.period}</p>
-                <p className="text-slate-600 text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">
-                  {edu.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+  // Link Google Drive Folder (Ganti link ini dengan link folder Anda)
+  const googleDriveLink = "https://drive.google.com/drive/folders/1XpIYj4tysGOqec_8CI6K2pw3aGyXCFLY?usp=sharing";
 
-        {/* Certifications (With Links) */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="flex items-center text-xl font-bold mb-8 text-slate-800">
-            <span className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
-              <Award className="w-5 h-5 text-orange-600" />
-            </span>
-            Certifications
-          </h3>
-          <div className="space-y-4">
-            {certifications.map((cert, index) => (
+  return (
+    <section id="education" className="py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Education & Achievements</h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Kolom KIRI: Education */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="flex items-center text-xl font-bold mb-8 text-slate-800">
+              <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                <GraduationCap className="w-5 h-5 text-blue-600" />
+              </span>
+              Formal Education
+            </h3>
+            <div className="space-y-6">
+              {education.map((edu, index) => (
+                <div key={index} className="pl-8 border-l-2 border-slate-100 relative pb-2">
+                  <span className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-4 border-blue-500"></span>
+                  <h4 className="text-lg font-bold text-slate-900">{edu.school}</h4>
+                  <p className="text-blue-600 font-medium text-sm mb-1">{edu.degree}</p>
+                  <p className="text-slate-400 text-xs mb-3">{edu.period}</p>
+                  <p className="text-slate-600 text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    {edu.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Kolom KANAN: Certifications (Modified) */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="flex items-center text-xl font-bold mb-8 text-slate-800">
+              <span className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                <Award className="w-5 h-5 text-orange-600" />
+              </span>
+              Certifications
+            </h3>
+
+            {/* List Sertifikat */}
+            <div className="space-y-4 mb-6">
+              <AnimatePresence>
+                {visibleCerts.map((cert, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="block bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition-all group hover:border-orange-300"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
+                          {cert.title}
+                        </h4>
+                        <p className="text-xs text-slate-500 mt-1">{cert.issuer} • {cert.year}</p>
+                      </div>
+                    </div>
+                    <p className="text-slate-600 text-sm mt-3 line-clamp-2">{cert.desc}</p>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* Tombol Load More & Google Drive */}
+            <div className="flex flex-col gap-3">
+              {certifications.length > 3 && (
+                <button
+                  onClick={() => setShowAllCerts(!showAllCerts)}
+                  className="flex items-center justify-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-800 py-2 border border-slate-200 rounded-lg bg-slate-50 hover:bg-white transition-all"
+                >
+                  {showAllCerts ? (
+                    <>Show Less <ChevronUp size={16} /></>
+                  ) : (
+                    <>Load More <ChevronDown size={16} /></>
+                  )}
+                </button>
+              )}
+
               <a
-                key={index}
-                href={cert.link || "#"}
+                href={googleDriveLink}
                 target="_blank"
                 rel="noreferrer"
-                className="block bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-orange-300 hover:translate-x-2 transition-all group"
+                className="flex items-center justify-center gap-2 w-full bg-orange-50 text-orange-700 py-3 rounded-xl font-medium text-sm hover:bg-orange-100 transition-colors border border-orange-200"
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
-                      {cert.title}
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-1">{cert.issuer} • {cert.year}</p>
-                  </div>
-                  {cert.link && <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-orange-500" />}
-                </div>
-                <p className="text-slate-600 text-sm mt-3 line-clamp-2">{cert.desc}</p>
+                <FolderOpen size={18} /> View All Proofs on Google Drive <ExternalLink size={14} />
               </a>
-            ))}
-          </div>
-        </motion.div>
+            </div>
+
+          </motion.div>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // --- Komponen Projects (Interactive Cards with Links) ---
 const Projects = () => (
@@ -341,7 +380,7 @@ const Footer = () => (
         href={`mailto:${personalData.contact.email}`}
         className="inline-flex items-center gap-2 text-white bg-blue-600 px-6 py-3 rounded-full font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/50"
       >
-        <Mail size={18} /> Say Hello
+        <Mail size={18} /> Contact Me
       </a>
 
       <div className="mt-16 pt-8 border-t border-slate-800 text-slate-500 text-sm">
